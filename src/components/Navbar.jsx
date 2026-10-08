@@ -1,19 +1,39 @@
 import { useState } from 'react';
-import { Menu, Search, Film, X } from 'lucide-react';
+import {
+  Menu,
+  Search,
+  Film,
+  X,
+  House,
+  TrendingUp,
+  Zap,
+  Drama,
+  Laugh,
+  Atom,
+  Info,
+  Mail,
+} from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
 const categoryLinks = [
-  { label: 'Trending', to: '/trending' },
-  { label: 'Action', to: '/action' },
-  { label: 'Drama', to: '/drama' },
-  { label: 'Comedy', to: '/comedy' },
-  { label: 'Sci‑Fi', to: '/sci-fi' },
+  { label: 'Trending', to: '/trending', Icon: TrendingUp },
+  { label: 'Action', to: '/action', Icon: Zap },
+  { label: 'Drama', to: '/drama', Icon: Drama },
+  { label: 'Comedy', to: '/comedy', Icon: Laugh },
+  { label: 'Sci‑Fi', to: '/sci-fi', Icon: Atom },
 ];
 
 const navLinkClass = ({ isActive }) =>
-  `rounded-lg px-3 py-2 text-sm font-medium transition-colors duration-200 ${
+  `inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors duration-200 ${
     isActive ? 'bg-white/10 text-white' : 'text-slate-300 hover:bg-white/5 hover:text-white'
   }`;
+
+const NavIconLink = ({ to, Icon, children, onClick, end = false }) => (
+  <NavLink to={to} end={end} className={navLinkClass} onClick={onClick}>
+    <Icon aria-hidden="true" size={16} strokeWidth={1.8} />
+    <span>{children}</span>
+  </NavLink>
+);
 
 const Navbar = ({
   searchTerm = '',
@@ -44,15 +64,15 @@ const Navbar = ({
           </NavLink>
         </div>
 
-        <div className="hidden items-center gap-1 md:flex lg:gap-2">
-          <NavLink to="/" end className={navLinkClass}>Home</NavLink>
+        <div className="hidden items-center gap-1 xl:flex lg:gap-2">
+          <NavIconLink to="/" Icon={House} end>Home</NavIconLink>
           {categoryLinks.map((category) => (
-            <NavLink key={category.label} to={category.to} className={navLinkClass}>
+            <NavIconLink key={category.label} to={category.to} Icon={category.Icon}>
               {category.label}
-            </NavLink>
+            </NavIconLink>
           ))}
-          <NavLink to="/about" className={navLinkClass}>About</NavLink>
-          <NavLink to="/contact" className={navLinkClass}>Contact</NavLink>
+          <NavIconLink to="/about" Icon={Info}>About</NavIconLink>
+          <NavIconLink to="/contact" Icon={Mail}>Contact</NavIconLink>
         </div>
 
         <div className="flex shrink-0 items-center gap-2">
@@ -72,7 +92,7 @@ const Navbar = ({
 
           <button
             type="button"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:scale-105 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 md:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:scale-105 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 xl:hidden"
             aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
             aria-expanded={menuOpen}
             aria-controls="mobile-navigation"
@@ -85,7 +105,7 @@ const Navbar = ({
 
       <div
         id="mobile-navigation"
-        className={`grid transition-[grid-template-rows,opacity,margin] duration-300 ease-out md:hidden ${
+        className={`grid transition-[grid-template-rows,opacity,margin] duration-300 ease-out xl:hidden ${
           menuOpen ? 'mt-3 grid-rows-[1fr] opacity-100' : 'mt-0 grid-rows-[0fr] opacity-0'
         }`}
         aria-hidden={!menuOpen}
@@ -93,19 +113,19 @@ const Navbar = ({
       >
         <div className="overflow-hidden">
           <div className="flex flex-col border-t border-white/10 pt-3">
-            <NavLink to="/" end className={navLinkClass} onClick={closeMenu}>Home</NavLink>
+            <NavIconLink to="/" Icon={House} end onClick={closeMenu}>Home</NavIconLink>
             {categoryLinks.map((category) => (
-              <NavLink
+              <NavIconLink
                 key={category.label}
                 to={category.to}
-                className={navLinkClass}
+                Icon={category.Icon}
                 onClick={closeMenu}
               >
                 {category.label}
-              </NavLink>
+              </NavIconLink>
             ))}
-            <NavLink to="/about" className={navLinkClass} onClick={closeMenu}>About</NavLink>
-            <NavLink to="/contact" className={navLinkClass} onClick={closeMenu}>Contact Us</NavLink>
+            <NavIconLink to="/about" Icon={Info} onClick={closeMenu}>About</NavIconLink>
+            <NavIconLink to="/contact" Icon={Mail} onClick={closeMenu}>Contact Us</NavIconLink>
 
             {showSearch && (
               <form onSubmit={(e) => { handleSearch(e); closeMenu(); }} className="relative mt-3 pb-1">
